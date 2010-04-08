@@ -226,7 +226,7 @@
 		<dependency>
 			<groupId>org.kathrynhuxtable.maven.plugins</groupId>
 			<artifactId>htmlfilter-site-maven-plugin</artifactId>
-			<version>0.3.4-SNAPSHOT</version>
+			<version>0.3.4</version>
 			<type>maven-plugin</type>
 		</dependency>
 		<dependency>
