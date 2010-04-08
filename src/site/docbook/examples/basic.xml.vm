@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Converted by db4-upgrade version 1.0 -->
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Basic Example</title>
+
+    <author>
+      <personname><firstname>Kathryn</firstname><surname>Huxtable</surname></personname>
+
+      <affiliation>
+        <orgname>kathrynhuxtable.org</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>2010-04-08</pubdate>
+  </info>
+
+  <section>
+    <info>
+      <title>Basic Example</title>
+    </info>
+
+    <para>Using the Docbkx Wrapper Plugin you can generate HTML from <link
+    xlink:href="http://www.docbook.org">DocBook</link> and then merge it with
+    a <link xlink:arcrole=""
+    xlink:href="http://velocity.apache.org">Velocity</link> template so that
+    it resembles the documentation produced by the <link
+    xlink:href="http://maven.apache.org/plugins/maven-site-plugin/">site
+    plugin</link>. These files can then be used in your site
+    documentation.</para>
+
+    <para>You can run the goal directly by executing:</para>
+
+    <synopsis>mvn docbkx-wrapper:generate</synopsis>
+
+    <para>It is better to bind the goal to the <code>pre-site</code> execution
+    phase, thus:</para>
+
+    <programlisting language="xml">&lt;plugin&gt;
+    &lt;groupId&gt;org.kathrynhuxtable.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;docbkx-wrapper-plugin&lt;/artifactId&gt;
+    &lt;version&gt;${project.version}&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;generate&lt;/goal&gt;
+            &lt;/goals&gt;
+            &lt;phase&gt;pre-site&lt;/phase&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+    ...
+&lt;/plugin&gt;</programlisting>
+
+    <para>That way you can simply execute:</para>
+
+    <synopsis>mvn site</synopsis>
+
+    <para>and the files will be generated before your site documentation is
+    produced.</para>
+
+    <para>By default, the source files are found in
+    <code>${basedir}/site/docbook</code> and are filtered into
+    <code>\${project.build.directory}/generated-site/resources</code>, which
+    will be copied into your site documentation folder.</para>
+  </section>
+</article>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Converted by db4-upgrade version 1.0 -->
+<article version="5.0" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/2000/svg"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>Introduction</title>
+
+    <author>
+      <personname><firstname>Kathryn</firstname><surname>Huxtable</surname></personname>
+
+      <affiliation>
+        <orgname>kathrynhuxtable.org</orgname>
+      </affiliation>
+    </author>
+
+    <pubdate>2010-04-08</pubdate>
+  </info>
+
+  <section>
+    <info>
+      <title>Introduction</title>
+    </info>
+
+    <para>The Docbkx Wrapper Plugin wraps the <link
+    xlink:href="http://docbkx-tools.sourceforge.net/docbkx-maven-plugin/">docbkx-maven-plugin</link>
+    and the <link
+    xlink:href="http://khuxtable.github.com/htmlfilter-site-maven-plugin">htmlfilter-site-maven-plugin</link>
+    such that they easily produce Maven site documentation from <link
+    xlink:href="http://www.docbook.org">DocBook</link> source that will fit in
+    with the <link
+    xlink:href="http://maven.apache.org/doxia/">Doxia</link>-generated site
+    reports produced by the <link
+    xlink:href="http://maven.apache.org/plugins/maven-site-plugin/">site
+    plugin</link>.</para>
+
+    <section>
+      <info>
+        <title>Goals Overview</title>
+      </info>
+
+      <para>The Docbkx Wrapper Plugin has one goal:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><link
+          xlink:href="generate-mojo.html">docbkx-wrapper:generate</link> runs
+          <link
+          xlink:href="http://docbkx-tools.sourceforge.net/docbkx-maven-plugin/generate-html-mojo.html">docbkx:generate-xhtml</link>
+          and then runs <link
+          xlink:href="http://khuxtable.github.com/htmlfilter-site-maven-plugin/generate-mojo.html">htmlfilter-site:merge</link>
+          on the resulting files.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <info>
+        <title>Usage</title>
+      </info>
+
+      <para>Information on using the Docbkx Wrapper Plugin can be found on the
+      <link xlink:href="usage.html">usage</link> page.</para>
+    </section>
+  </section>
+</article>
