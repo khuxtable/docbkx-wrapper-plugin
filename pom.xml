@@ -9,9 +9,8 @@
 	</prerequisites>
 	<name>docbkx-wrapper-plugin Maven Mojo</name>
 	<description>
-		The docbkx-wrapper-plugin is a wrapper around the docbkx-maven-plugin and the
-		htmlfilter-site-maven-plugin. It is intended to simplify their use by factoring out common
-		elements.
+		The docbkx-wrapper-plugin is a wrapper around the docbkx-maven-plugin designed to produce
+		maven site documentation that fits with that produced by the site plugin.
 	</description>
 	<inceptionYear>2010</inceptionYear>
 	<url>http://khuxtable.github.com/docbkx-wrapper-plugin</url>
@@ -209,12 +208,21 @@
 			<version>2.0.10</version>
 			<type>maven-plugin</type>
 		</dependency>
-		<dependency>
-			<groupId>org.kathrynhuxtable.maven.plugins</groupId>
-			<artifactId>htmlfilter-site-maven-plugin</artifactId>
-			<version>0.3.4</version>
-			<type>maven-plugin</type>
-		</dependency>
+        <dependency>
+            <groupId>velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jdom</groupId>
+            <artifactId>jdom</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>jaxen</groupId>
+            <artifactId>jaxen</artifactId>
+            <version>1.1.1</version>
+        </dependency>
 		<dependency>
 			<groupId>net.sf.docbook</groupId>
 			<artifactId>docbook-xml</artifactId>
@@ -225,8 +233,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
-			<scope>test</scope>
+			<version>4.8.1</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>
