@@ -28,10 +28,8 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -44,43 +42,29 @@ import org.apache.maven.doxia.tools.SiteTool;
 import org.apache.maven.doxia.tools.SiteToolException;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
-
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.exception.MethodInvocationException;
 import org.apache.velocity.exception.ParseErrorException;
 import org.apache.velocity.exception.ResourceNotFoundException;
-
 import org.codehaus.plexus.i18n.DefaultI18N;
 import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.PathTool;
 import org.codehaus.plexus.util.StringUtils;
-
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
-
 import org.jdom.input.SAXBuilder;
-
 import org.jdom.output.Format;
-
 import org.jdom.xpath.XPath;
 
 /**
  * Goal runs Velocity on the files in the specified directory.
  */
 public class Merger {
-
-    /**
-     * Velocity template for filtering.
-     *
-     * @parameter expression="${htmlfiltersite.templateFile}"
-     *            default-value="${basedir}/src/site/site.vm"
-     */
-    private File templateFile;
 
     private MavenProject    project;
     private I18N            i18n;
