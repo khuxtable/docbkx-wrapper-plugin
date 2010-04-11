@@ -3,8 +3,6 @@ package org.kathrynhuxtable.maven.plugins.docbkxwrapper;
 import java.io.File;
 import java.io.IOException;
 
-import java.lang.reflect.Field;
-
 import java.util.List;
 
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -19,14 +17,13 @@ import org.codehaus.plexus.i18n.I18N;
 import org.codehaus.plexus.util.FileUtils;
 import org.codehaus.plexus.util.ReaderFactory;
 
-import com.agilejava.docbkx.maven.DocbkxXhtmlMojo;
-
 /**
  * Goal which wraps the
  *
- * @description Runs docbkx htmlfilter-site plugins.
- * @goal        generate
- * @phase       pre-site
+ * @description                  Runs docbkx htmlfilter-site plugins.
+ * @goal                         generate
+ * @phase                        pre-site
+ * @requiresDependencyResolution runtime
  */
 public class GenerateMojo extends AbstractMojo {
 
@@ -49,7 +46,7 @@ public class GenerateMojo extends AbstractMojo {
     /**
      * Match pattern for the files to be processed.
      *
-     * @parameter expression="${htmlfiltersite.filePattern}"
+     * @parameter expression="${docbkxwrapper.filePattern}"
      *            default-value="**\/*.xml,**\/*.xml.vm"
      */
     private String filePattern;
@@ -57,7 +54,7 @@ public class GenerateMojo extends AbstractMojo {
     /**
      * Match pattern for the files to be filtered.
      *
-     * @parameter expression="${htmlfiltersite.filterExtension}"
+     * @parameter expression="${docbkxwrapper.filterExtension}"
      *            default-value=".xml.vm"
      */
     private String filterExtension;
@@ -66,7 +63,7 @@ public class GenerateMojo extends AbstractMojo {
      * Directory containing the site.xml file and the source for apt, fml and
      * xdoc docs, e.g. ${basedir}/src/site.
      *
-     * @parameter expression="${htmlfiltersite.siteDirectory}"
+     * @parameter expression="${docbkxwrapper.siteDirectory}"
      *            default-value="${basedir}/src/site"
      */
     private File siteDirectory;
@@ -74,7 +71,7 @@ public class GenerateMojo extends AbstractMojo {
     /**
      * Location of the source directory.
      *
-     * @parameter expression="${htmlfiltersite.docbookOutputDirectory}"
+     * @parameter expression="${docbkxwrapper.docbookOutputDirectory}"
      *            default-value="${project.build.directory}/docbook-xhtml"
      */
     private File docbookOutputDirectory;
@@ -82,7 +79,7 @@ public class GenerateMojo extends AbstractMojo {
     /**
      * Location of the output directory.
      *
-     * @parameter expression="${htmlfiltersite.targetDirectory}"
+     * @parameter expression="${docbkxwrapper.targetDirectory}"
      *            default-value="${project.build.directory}/site"
      */
     private File targetDirectory;
@@ -94,22 +91,6 @@ public class GenerateMojo extends AbstractMojo {
      *            default-value="org/kathrynhuxtable/maven/plugins/docbkxwrapper/site.vm"
      */
     private File templateFile;
-
-    /**
-     * Project base.
-     *
-     * @parameter expression="${basedir}"
-     * @required
-     */
-    private File basedir;
-
-    /**
-     * Location of generated files.
-     *
-     * @parameter expression="${project.build.directory}"
-     * @required
-     */
-    private File projectBuildDirectory;
 
     /**
      * Remote repositories used for the project.
@@ -156,6 +137,9 @@ public class GenerateMojo extends AbstractMojo {
     /** Plexis internationalization element. */
     private I18N i18n = new DefaultI18N();
 
+    private RunDocbkxPlugin docbkxPlugin = new RunDocbkxPlugin();
+    private Merger          merger       = new Merger();
+
     /**
      * Gets the input files encoding.
      *
@@ -197,7 +181,7 @@ public class GenerateMojo extends AbstractMojo {
      * @see org.apache.maven.plugin.AbstractMojo#execute()
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        generateXhtml();
+        docbkxPlugin.generateXhtml(getLog(), new File(siteDirectory, "docbook"), filePattern, docbookOutputDirectory);
         mergeFiles();
     }
 
@@ -207,83 +191,20 @@ public class GenerateMojo extends AbstractMojo {
      * @throws MojoFailureException
      * @throws MojoExecutionException
      */
-    private void generateXhtml() throws MojoFailureException, MojoExecutionException {
-        DocbkxXhtmlMojo docbkxMojo = new DocbkxXhtmlMojo();
-
-        docbkxMojo.setLog(getLog());
-
-        setValue(docbkxMojo, "sourceDirectory", new File(basedir, "src/site/docbook"));
-        setValue(docbkxMojo, "includes", filePattern);
-        setValue(docbkxMojo, "targetDirectory", docbookOutputDirectory);
-        setValue(docbkxMojo, "xhtmlCustomization", "/org/kathrynhuxtable/maven/plugins/docbkxwrapper/xsl/html.xsl");
-
-        setValue(docbkxMojo, "targetFileExtension", "html");
-        setValue(docbkxMojo, "imgSrcPath", "./");
-        // setValue(docbkxMojo, "chunkedOutput", false);
-        setValue(docbkxMojo, "generateMetaAbstract", "false");
-        setValue(docbkxMojo, "generateToc", "false");
-        setValue(docbkxMojo, "highlightSource", "true");
-        setValue(docbkxMojo, "highlightDefaultLanguage", null);
-        // setValue(docbkxMojo, "htmlCellSpacing", 2);
-        // setValue(docbkxMojo, "htmlCellPadding", 2);
-        setValue(docbkxMojo, "suppressHeaderNavigation", "true");
-        setValue(docbkxMojo, "suppressFooterNavigation", "true");
-        setValue(docbkxMojo, "tableBordersWithCss", "true");
-        setValue(docbkxMojo, "tableFrameBorderThickness", "0");
-        setValue(docbkxMojo, "tableCellBorderThickness", "0");
-        setValue(docbkxMojo, "useExtensions", "true");
-        setValue(docbkxMojo, "calloutsExtension", "true");
-
-        docbkxMojo.execute();
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @param  o         DOCUMENT ME!
-     * @param  fieldName DOCUMENT ME!
-     * @param  value     DOCUMENT ME!
-     *
-     * @throws MojoFailureException DOCUMENT ME!
-     */
-    private void setValue(Object o, String fieldName, Object value) throws MojoFailureException {
-        Class<?> c     = o.getClass();
-        Field    field;
-
-        try {
-            field = c.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(o, value);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new MojoFailureException(e.getMessage());
-        }
-    }
-
-    /**
-     * DOCUMENT ME!
-     *
-     * @throws MojoFailureException
-     * @throws MojoExecutionException
-     */
     private void mergeFiles() throws MojoFailureException, MojoExecutionException {
-        Merger merger = new Merger();
-
         merger.initialize(templateFile, localRepository, repositories, i18n, getInputEncoding(), getOutputEncoding(), siteDirectory,
                           project, siteTool, reactorProjects);
 
-        // Convert filter extension into what Docbkx will produce, e.g. foo.xml.vm becomes foo.xm.html
-        String localExtension = makeDocbookFilename(filterExtension);
+        // Convert filter extension into what Docbkx will produce, e.g. .xml.vm becomes .xm.html
+        String filterExtension = makeDocbookFilename(this.filterExtension);
 
-        String localPattern = makeDocbookPattern(filePattern);
-
-        for (String file : getFileList(new File(projectBuildDirectory, "generated-site/docbook-xhtml"), localPattern)) {
-            boolean doFiltering = (localExtension != null
-                        && localExtension.equals(file.substring(file.length() - localExtension.length())));
+        for (String file : getFileList(docbookOutputDirectory, makeDocbookPattern(filePattern))) {
+            boolean doFiltering = (filterExtension != null
+                        && filterExtension.equals(file.substring(file.length() - filterExtension.length())));
 
             File targetFile = new File(targetDirectory, makeFinalFilename(file, doFiltering, filterExtension));
 
-            merger.mergeFile(file, doFiltering, localExtension, docbookOutputDirectory, targetFile);
+            merger.mergeFile(file, doFiltering, filterExtension, docbookOutputDirectory, targetFile);
         }
     }
 
