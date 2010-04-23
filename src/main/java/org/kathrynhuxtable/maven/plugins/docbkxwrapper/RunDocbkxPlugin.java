@@ -52,7 +52,7 @@ public class RunDocbkxPlugin {
         setValue(docbkxMojo, "sourceDirectory", sourceDirectory);
         setValue(docbkxMojo, "includes", filePattern);
         setValue(docbkxMojo, "targetDirectory", docbookOutputDirectory);
-        setValue(docbkxMojo, "xhtmlCustomization", "org/kathrynhuxtable/maven/plugins/docbkxwrapper/xsl/html.xsl");
+        setValue(docbkxMojo, "xhtmlCustomization", "/org/kathrynhuxtable/maven/plugins/docbkxwrapper/xsl/html.xsl");
 
         setValue(docbkxMojo, "targetFileExtension", "html");
         setValue(docbkxMojo, "imgSrcPath", "./");
